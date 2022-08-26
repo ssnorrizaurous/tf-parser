@@ -95,17 +95,17 @@ func parseBody(body *hclwrite.Body, inBlocks []string) {
 
 	blocks := body.Blocks()
 	// TODO why is filter not being parsed
-	for offset, block := range blocks {
+	for _, block := range blocks {
 
 		//fmt.Printf("%s.%v\n", block.Type(), block.Labels())
 
 		// TODO fix
-		if len(block.Labels()) > 0 {
-			fmt.Printf("%s%s.%s\n", strings.Repeat("\t", offset), block.Type(), strings.Join(block.Labels(), "."))
-		} else {
-			fmt.Printf("%s%s\n", strings.Repeat("\t", offset), block.Type())
-		}
 		inBlocks := append(inBlocks, block.Type())
+		if len(block.Labels()) > 0 {
+			fmt.Printf("%s%s.%s\n", strings.Repeat("\t", len(inBlocks)-1), block.Type(), strings.Join(block.Labels(), "."))
+		} else {
+			fmt.Printf("%s%s\n", strings.Repeat("\t", len(inBlocks)-1), block.Type())
+		}
 		//fmt.Printf("inblocks: %v, body: %v\n", inBlocks, block.Labels())
 
 		parseBody(block.Body(), inBlocks)
